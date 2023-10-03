@@ -1,0 +1,23 @@
+    - name: Create Docker volume
+      docker_volume:
+        name: data_volume
+
+    - name: Create Docker container
+      docker_container:
+        name: postgre_cont
+        image: postgres
+        restart_policy: always
+        volumes:
+          - data_volume:/var/lib/postgresql/data
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_USER: "{{user}}"
+          POSTGRES_PASSWORD: "{{password}}"
+          POSTGRES_DB: "{{database}}"
+
+    - name: Start Docker container
+      docker_container:
+        name: postgre_cont
+        state: started
+  
